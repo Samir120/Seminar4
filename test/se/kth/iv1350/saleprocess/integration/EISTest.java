@@ -30,30 +30,41 @@ class EISTest {
 	}
 	
 	@Test
-	public void testGetItem() {
+	public void testGetItem() throws InvalidItemIdentifierException, 
+									DatabaseFailureException{
 		ItemDTO item = new ItemDTO("BOB jam", "0005", "Raspberry jam with more berries", 35.00, 0.25, 1);
 		ItemDTO result = null;
 		String itemIdentifier = "0005";
 		result = eis.getItem(itemIdentifier);
 		assertTrue(result.getDescription().contains("Raspberry jam with more berries"), "Got wrong result from getItem()");
 	}
-
+	
 	@Test
-	public void testItemValidityWithExistingItem() {
-		Boolean expResult = true;
-		Boolean result;
-		String itemIdentifier = "0002";
-		result = eis.itemValidity(itemIdentifier);
-		assertEquals(expResult, result, "Got wrong result form itemValidity()");
+	public void testInvalidItemIdentifierException() throws InvalidItemIdentifierException, 
+															DatabaseFailureException{
+		String itemIdentifier = "0008";
+		ItemDTO result = null;
+		try {
+			result = eis.getItem(itemIdentifier);
+			fail("The exception is not executed.");
+		}
+		catch(InvalidItemIdentifierException e) {
+			assertTrue(e.getMessage().contains("The item identifier: "), "InvalidItemIdentifierException is not executed.");
+		}
 	}
 	
 	@Test
-	public void testItemValidityWithNonExistentItem() {
-		Boolean expResult = false;
-		Boolean result;
-		String itemIdentifier = "0007";
-		result = eis.itemValidity(itemIdentifier);
-		assertEquals(expResult, result, "Got wrong result form itemValidity()");
+	public void testDatabaseFailureException() throws InvalidItemIdentifierException, 
+															DatabaseFailureException{
+		ItemDTO result = null;
+		String itemIdentifier = "0000";
+		try {
+			result = eis.getItem(itemIdentifier);
+			fail("The exception is not executed.");
+		}
+		catch(DatabaseFailureException e) {
+			assertTrue(e.getMessage().contains("Unable to connect to the database."), "DatabaseFailureException is not executed.");
+		}
 	}
 	
 }

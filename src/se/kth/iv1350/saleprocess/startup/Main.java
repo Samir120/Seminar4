@@ -9,7 +9,15 @@ import se.kth.iv1350.saleprocess.view.*;
  * @author samiralami
  */
 public class Main {
-    public static void main(String[] args) {
+	
+	/**
+	 * Executes the application.
+	 * @param args the command line parameter.
+	 * @throws InvalidItemIdentifierException if an item is not fetched for an invalid identifier.
+     * @throws DatabaseFailureException if a connection to the EIS is not builded up.
+	 */
+    public static void main (String[] args) throws InvalidItemIdentifierException, 
+											DatabaseFailureException {
         EIS eis = new EIS();
         EAS eas = new EAS();
         Printer printer = new Printer();

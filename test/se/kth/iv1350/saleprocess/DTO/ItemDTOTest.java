@@ -57,18 +57,18 @@ class ItemDTOTest {
 	}
 	
 	@Test
-	public void testGetSoldQuantity() {
-		int expResult = 1;
+	public void testSetSoldQuantity() {
+		int expResult = 2;
+		itemDTO.setSoldQuantity(2);
 		int result = itemDTO.getSoldQuantity();
 		assertEquals(expResult, result, "Got wrong quantity from getSoldQuantity()");
 	}
 	
 	@Test
-	public void testIncreaseSoldQuantity() {
-		int expResult = 2;
-		itemDTO.increaseSoldQuantity();
+	public void testGetSoldQuantity() {
+		int expResult = 1;
 		int result = itemDTO.getSoldQuantity();
-		assertEquals(expResult, result, "Got wrong quantity from increaseSoldQuantity()");
+		assertEquals(expResult, result, "Got wrong quantity from getSoldQuantity()");
 	}
 
 }

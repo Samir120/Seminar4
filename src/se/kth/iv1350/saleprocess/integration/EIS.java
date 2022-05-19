@@ -28,26 +28,18 @@ public class EIS {
      * Gets a specific item from the listOfItems.
      * @param itemIdentifier The identifier of an item.
      * @return The item as an ItemDTO. 
+     * @throws InvalidItemIdentifierException if an item is not fetched for an invalid identifier.
+     * @throws DatabaseFailureException if a connection to the EIS is not builded up.
      */
-    public ItemDTO getItem(String itemIdentifier){
-        ItemDTO result = null;
-        for(ItemDTO itemDTO : listOfItems)
-            if(itemDTO.getItemIdentifier().equals(itemIdentifier))
-                result = itemDTO;
-        return result;
-    }
-    
-    /**
-     * 
-     * @param itemIdentifier
-     * @return
-     */
-    public Boolean itemValidity(String itemIdentifier) {
-        Boolean result = false;
-        for(ItemDTO itemDTO : listOfItems)
-            if(itemDTO.getItemIdentifier().equals(itemIdentifier))
-                result = true;
-        return result;
+    public ItemDTO getItem(String itemIdentifier) throws InvalidItemIdentifierException,
+    													DatabaseFailureException {
+    	if(!itemIdentifier.equals("0000")) {
+    		for(ItemDTO itemDTO : listOfItems)
+                if(itemDTO.getItemIdentifier().equals(itemIdentifier))
+                    return itemDTO;
+            throw new InvalidItemIdentifierException("The item identifier: " + itemIdentifier + " is not valid.");
+    	}
+    	throw new DatabaseFailureException("Unable to connect to the database.");
     }
     
     /**

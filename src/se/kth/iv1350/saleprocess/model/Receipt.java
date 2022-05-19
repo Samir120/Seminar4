@@ -50,8 +50,8 @@ public class Receipt {
         for(ItemDTO itemDTO : registeredGoods) {
         	String stringForamt3 = String.format("%-20s %5s %10s\n", itemDTO.getName(), itemDTO.getSoldQuantity(),itemDTO.getPrice());
         	sb.append(stringForamt3);
-        	totalPrice += itemDTO.getPrice();
-        	totalVAT += itemDTO.getVAT();
+        	totalPrice += itemDTO.getPrice() * itemDTO.getSoldQuantity();
+        	totalVAT += itemDTO.getVAT() * itemDTO.getSoldQuantity();
         	totalPriceIncludingVAT += (itemDTO.getPrice() + itemDTO.getVAT()) * itemDTO.getSoldQuantity();
         	
         }

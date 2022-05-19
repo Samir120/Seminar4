@@ -73,6 +73,19 @@ public class ItemDTO {
         return this.VAT;
     }
     
+    /**
+     * Returns the sold goods quantity.
+     * @return The return value as an integer. 
+     */
+    
+    /**
+     * Set the sold goods quantity.
+     * @param soldQuantity New quantity for sold item. 
+     */
+     public void setSoldQuantity(int soldQuantity) {
+         this.soldQuantity = soldQuantity;
+     }
+    
    /**
     * Returns the sold goods quantity.
     * @return The return value as an integer. 
@@ -81,12 +94,6 @@ public class ItemDTO {
         return this.soldQuantity;
     }
     
-    /**
-     * Increase the sold item quantity in multiple item case.
-     */
-    public void increaseSoldQuantity() {
-        this.soldQuantity ++;
-    }
     
     
 }

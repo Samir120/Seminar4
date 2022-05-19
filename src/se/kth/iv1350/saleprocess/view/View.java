@@ -1,8 +1,11 @@
 package se.kth.iv1350.saleprocess.view;
 
 import se.kth.iv1350.saleprocess.controller.*;
+import se.kth.iv1350.saleprocess.integration.DatabaseFailureException;
+import se.kth.iv1350.saleprocess.integration.InvalidItemIdentifierException;
 import se.kth.iv1350.saleprocess.DTO.*;
 import se.kth.iv1350.saleprocess.model.*;
+import se.kth.iv1350.saleprocess.util.TotalRevenueFileOutput;
 
 /**
  * This is a virtual screen for the user interface. Hardcoded execution created here.
@@ -18,12 +21,17 @@ public class View {
      */
     public View(Controller contr) {
         this.contr = contr;
+        contr.addSaleObserver(new TotalRevenueView());
+        contr.addSaleObserver(new TotalRevenueFileOutput());
     }
     
     /**
      * A fake execution for running the application.
+     * @throws InvalidItemIdentifierException if an item is not fetched for an invalid identifier.
+     * @throws DatabaseFailureException if a connection to the EIS is not builded up.
      */
-    public void runFakeExecution() {
+    public void runFakeExecution() throws InvalidItemIdentifierException, 
+										DatabaseFailureException{
         contr.startTheSale();
         System.out.println(".......A new sale has been statrted.......");
         System.out.println("Scanning items...");
@@ -36,6 +44,11 @@ public class View {
         fakeDisplay(contr.addItem("0003"));
         fakeDisplay(contr.addItem("0004"));
         fakeDisplay(contr.addItem("0005"));
+        fakeDisplay(contr.addItem("0003"));
+        fakeDisplay(contr.addItem("0005"));
+        fakeDisplay(contr.addItem("0005"));
+        
+        
         System.out.println("..........All items are scanned..........");
         System.out.println();
         
@@ -44,7 +57,7 @@ public class View {
         String stringForamt3 = String.format("%s  %.5s", "Total price: ", totalPrice);
         System.out.println(stringForamt3);
         
-        double change = contr.payment(400);
+        double change = contr.payment(500);
         String stringForamt4 = String.format("%s  %.5s", "Change: ", change);
         System.out.println(stringForamt4);
         System.out.println();

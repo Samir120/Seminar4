@@ -1,6 +1,5 @@
 package se.kth.iv1350.saleprocess.model;
 import se.kth.iv1350.saleprocess.DTO.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ public class Sale {
     private final List<ItemDTO> registeredGoods = new ArrayList<>();
     private double totalPrice;
     double change;
+    private List<SaleObserver> saleObservers = new ArrayList<>();
     
     /**
      * Create an instance for <code>Sale</code>. 
@@ -29,7 +29,8 @@ public class Sale {
     public void listOfRegisteredGood(ItemDTO soldGood) {
         if(!itemHasAlreadyBeenAdded(soldGood))
             registeredGoods.add(soldGood);
-        incrementSoldGoodsQuantity(soldGood.getItemIdentifier());
+        else 
+        	incrementSoldGoodsQuantity(soldGood.getItemIdentifier());
     }
     
     /**
@@ -37,10 +38,10 @@ public class Sale {
      * @param soldGood The item that needs to check for multiplicity.
      * @return The result as a boolean.
      */
-    private Boolean itemHasAlreadyBeenAdded(ItemDTO soldGood){
-        Boolean result = false;
+    private boolean itemHasAlreadyBeenAdded(ItemDTO soldGood){
+        boolean result = false;
         for(ItemDTO itemDTO : registeredGoods)
-            if(soldGood.getItemIdentifier().equals(itemDTO.getItemIdentifier()))
+            if(itemDTO.getItemIdentifier().equals(soldGood.getItemIdentifier()))
                 result = true;
         return result;
     }
@@ -51,8 +52,11 @@ public class Sale {
      */
     public void incrementSoldGoodsQuantity(String itemIdentifier) {
         for(ItemDTO itemDTO : registeredGoods)
-            if(itemDTO.getDescription().equals(itemIdentifier))
-                itemDTO.increaseSoldQuantity();
+            if(itemDTO.getItemIdentifier().equals(itemIdentifier)) {
+            	int incrementedQuantity = itemDTO.getSoldQuantity() + 1;
+            	itemDTO.setSoldQuantity(incrementedQuantity);            	
+            }
+               
     }
     
     /**
@@ -89,7 +93,13 @@ public class Sale {
      */
     public double payment(int amount) {
         change = amount - totalPrice;
+        notifyObservers();
         return change;
+    }
+    
+    private void notifyObservers() {
+    	for(SaleObserver observer : saleObservers)
+    		observer.newSale(totalPrice);
     }
     
     /**
@@ -98,6 +108,10 @@ public class Sale {
      */
     public List<ItemDTO> getRegisteredGoods() {
         return registeredGoods;
+    }
+    
+    public void addSaleObserver(List<SaleObserver> onservers) {
+    	saleObservers.addAll(onservers);
     }
   
 }
